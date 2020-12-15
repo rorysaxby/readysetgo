@@ -1,24 +1,34 @@
-<!doctype html>
+<!DOCTYPE html>
 <html>
   <head>
-    <title>Socket.IO chat</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="style.css" />
+    <title>Snakes</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="http://localhost:3000/style.css" />
   </head>
   <body>
-    <section class="chat-messages">
-      <ul id="messages">
-
-      </ul>
-    </section>
-    <section class="message-window">
-      <form id="ChatForm" action="" class="message-form">
-        <div class="input-field message-field">
-          <input id="MessageInput" autocomplete="off" /><button type="submit" class="button message-button">Send</button>
+    <div class="player-view">
+      <div class="load-player-form">
+        <h1>Snakes</h1>
+        <img src="./ha-snakes.jpg" />
+        <label for="playerName">Enter player name:</label>
+        <input id="playerName" name="playerName" type="text" />
+        <button id="loadPlayer" type="button">Let's do this</button>
+      </div>
+    </div>
+    <div class="game-view visually-hidden">
+      <div class="grid"></div>
+      <div class="scoreDisplay"></div>
+      <div class="controls-display">
+        <div class="controls-display-box">
+          <h1>Snakes</h1>
+          <p><strong class="player-name"></strong></p>
+          <button class="start">Start</button>
+          <img src="./ha-snakes.jpg" />
         </div>
-      </form>
-    </section>
+      </div>
+    </div>
     <script src="/socket.io/socket.io.js"></script>
-    <script src="script.js"></script>
+    <!-- <script src="http://localhost:3000/script.js"></script> -->
+    <script src="http://localhost:3000/snakes-player.js"></script>
   </body>
 </html>
