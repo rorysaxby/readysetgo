@@ -14,6 +14,29 @@ let gameProps = {
   firstAppleIndex: 0,
 };
 
+const colours = [
+  "s-red",
+  "s-green",
+  "s-yellow",
+  "s-pink",
+  "s-blue",
+  "s-black",
+  "s-orange",
+  "s-dark-blue",
+  "s-purple",
+  "s-burgundy",
+  "s-red",
+  "s-green",
+  "s-yellow",
+  "s-pink",
+  "s-blue",
+  "s-black",
+  "s-orange",
+  "s-dark-blue",
+  "s-purple",
+  "s-burgundy",
+];
+
 const setMaxScreenSize = () => {
   gameProps.screenX = gameProps.players[0].screenX;
   gameProps.screenY = gameProps.players[0].screenY;
@@ -45,6 +68,9 @@ const setPlayerStartPositions = () => {
     ];
     gameProps.players[i].direction = gameProps.squaresX;
     pos1 += increment;
+    gameProps.players[i].score = 0;
+    gameProps.players[i].alive = true;
+    gameProps.players[i].keyPressed = "ArrowDown";
   }
 };
 
@@ -94,8 +120,13 @@ io.on("connection", (socket) => {
   });
 
   socket.on("playerSetup", (playerProps) => {
-    gameProps.players.push({ id: socket.id, ...playerProps });
-    socket.emit("playerLoaded", socket.id);
+    gameProps.players.push({ id: socket.id, ...playerProps, color: "" });
+    gameProps.players[gameProps.players.length - 1].color =
+      colours[gameProps.players.length - 1];
+    socket.emit(
+      "playerLoaded",
+      gameProps.players[gameProps.players.length - 1]
+    );
   });
 
   socket.on("startGame", () => {

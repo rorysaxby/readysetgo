@@ -10,7 +10,7 @@
   const playerNameDisplay = document.querySelector(".player-name");
   const grid = document.querySelector(".grid");
   const startBtn = document.querySelector(".start");
-  const scoreDisplay = document.querySelector(".scoreDisplay");
+  const scoreDisplay = document.querySelector(".score-display");
   const controlsDisplay = document.querySelector(".controls-display");
 
   let playerId = "";
@@ -29,6 +29,29 @@
     }
   };
 
+  const creatScoreboard = () => {
+    scoreDisplay.innerHTML = "";
+    for (let i = 0; i < gameProps.players.length; i++) {
+      let div = document.createElement("div");
+      div.className = "player-score";
+      div.innerHTML =
+        '<div class="player"><div class="score-square ' +
+        gameProps.players[i].color +
+        '"></div>' +
+        gameProps.players[i].name +
+        "</div>" +
+        "<div id=" +
+        gameProps.players[i].id +
+        ' class="score">0</div>';
+      scoreDisplay.appendChild(div);
+    }
+  };
+
+  const updatePlayerScore = (player) => {
+    let score = document.getElementById(player.id);
+    score.innerText = player.score;
+  };
+
   const control = (e) => {
     switch (e.key) {
       case "ArrowRight":
@@ -44,7 +67,6 @@
         direction = +gameProps.squaresX;
         break;
     }
-    let key = e.key;
     socket.emit("playerDirection", { playerId, direction });
   };
 
@@ -52,7 +74,7 @@
     let squares = document.querySelectorAll(".grid div");
     gameProps.players.forEach((player) => {
       player.snake.forEach((pos) => {
-        squares[pos].classList.add("snake", player.id);
+        squares[pos].classList.add("snake", player.id, player.color);
       });
     });
   };
@@ -75,26 +97,37 @@
     );
   };
 
+  const allPlayersDead = () => {
+    for (let i = 0; i < gameProps.players.length; i++) {
+      if (gameProps.players[i].alive) return false;
+    }
+    return true;
+  };
+
   const moveChecks = () => {
     let squares = document.querySelectorAll(".grid div");
     gameProps.players.forEach((player) => {
       if (checkCollisions(player, squares)) {
         player.snake.forEach((pos) => {
-          squares[pos].classList.remove("snake", player.id);
+          squares[pos].classList.remove("snake", player.id, player.color);
         });
-
+        player.alive = false;
         if (player.id === playerId) {
-          controlsDisplay.classList.remove("visually-hidden");
-          clearInterval(gameLoop);
+          document.removeEventListener("keydown", control);
         }
-        return;
       } else {
-        moveSnake(player, squares);
+        if (player.alive) {
+          moveSnake(player, squares);
+        }
       }
     });
+    if (allPlayersDead()) {
+      clearInterval(gameLoop);
+      controlsDisplay.classList.remove("visually-hidden");
+    }
   };
 
-  const changePlayersDirection = (obj) => {
+  const changePlayerDirection = (obj) => {
     gameProps.players.forEach((player) => {
       if (player.id === obj.playerId) {
         player.direction = obj.direction;
@@ -102,26 +135,26 @@
     });
   };
 
-  socket.on("playerChangedDirection", changePlayersDirection);
-
-  // player direction - name,direction
-  // eat apple - name, appleIndex -> respond new apple position
+  socket.on("playerChangedDirection", changePlayerDirection);
 
   const eatApple = (squares, tail, player) => {
     if (squares[player.snake[0]].classList.contains("apple")) {
       squares[player.snake[0]].classList.remove("apple");
-      squares[tail].classList.add("snake", player.id);
+      squares[tail].classList.add("snake", player.id, player.color);
       player.snake.push(tail);
-      randomApple(squares);
+      if (player.id === playerId) {
+        randomApple(squares);
+      }
       player.score++;
-      // scoreDisplay.textContent = score;
-      clearInterval(gameLoop);
-      gameLoopTime = gameLoopTime * speed;
-      gameLoop = setInterval(moveChecks, gameLoopTime);
+      updatePlayerScore(player);
+      // clearInterval(gameLoop);
+      // gameLoopTime = gameLoopTime * speed;
+      // gameLoop = setInterval(moveChecks, gameLoopTime);
     }
   };
 
   const randomApple = (squares) => {
+    let appleIndex;
     do {
       appleIndex = Math.floor(Math.random() * squares.length);
     } while (squares[appleIndex].classList.contains("snake"));
@@ -137,10 +170,10 @@
 
   const moveSnake = (player, squares) => {
     let tail = player.snake.pop();
-    squares[tail].classList.remove("snake", player.id);
+    squares[tail].classList.remove("snake", player.id, player.color);
     player.snake.unshift(player.snake[0] + player.direction);
     eatApple(squares, tail, player);
-    squares[player.snake[0]].classList.add("snake", player.id);
+    squares[player.snake[0]].classList.add("snake", player.id, player.color);
   };
 
   const loadGame = (props) => {
@@ -148,10 +181,11 @@
     gameLoopTime = 300;
     speed = 0.8;
     createBoard();
+    creatScoreboard();
     document.addEventListener("keydown", control);
     controlsDisplay.classList.add("visually-hidden");
+    scoreDisplay.classList.remove("visually-hidden");
     renderSnakes();
-    let squares = document.querySelectorAll(".grid div");
     addApple(gameProps.firstAppleIndex);
     gameLoop = setInterval(moveChecks, gameLoopTime);
   };
@@ -162,10 +196,11 @@
     socket.emit("startGame");
   };
 
-  const initLoadScreen = (id) => {
-    playerId = id;
+  const initLoadScreen = (player) => {
+    playerId = player.id;
     views.player.classList.add("visually-hidden");
     views.game.classList.remove("visually-hidden");
+    views.game.classList.add(player.color);
     startBtn.addEventListener("click", initGame);
   };
 
@@ -181,6 +216,8 @@
       score: 0,
       snake: [],
       direction: 1,
+      alive: true,
+      color: "",
     });
   };
 

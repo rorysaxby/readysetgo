@@ -9,19 +9,26 @@
     <div class="player-view">
       <div class="load-player-form">
         <h1>Snakes</h1>
-        <img src="./ha-snakes.jpg" />
-        <label for="playerName">Enter player name:</label>
-        <input id="playerName" name="playerName" type="text" />
+        <div class="form-field">
+          <label for="playerName">Player name</label>
+          <input id="playerName" name="playerName" type="text" />
+        </div>
         <button id="loadPlayer" type="button">Let's do this</button>
+        <img src="./ha-snakes.jpg" />
       </div>
     </div>
     <div class="game-view visually-hidden">
+      <div class="score-display visually-hidden"></div>
       <div class="grid"></div>
-      <div class="scoreDisplay"></div>
       <div class="controls-display">
         <div class="controls-display-box">
           <h1>Snakes</h1>
           <p><strong class="player-name"></strong></p>
+          <div class="snake-container">
+            <div class="snake"></div>
+            <div class="snake"></div>
+            <div class="snake"></div>
+          </div>
           <button class="start">Start</button>
           <img src="./ha-snakes.jpg" />
         </div>

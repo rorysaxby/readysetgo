@@ -78,6 +78,7 @@ html {
 }
 
 body {
+  font-family: Arial, sans-serif;
   font-size: 1.6rem;
   padding: 0;
   margin: 0;
@@ -94,53 +95,191 @@ h4,
 h5,
 h6 {
   font-weight: 1.5em;
+  font-size: 3.5rem;
   font-family: Arial, sans-serif;
   color: #ffffff;
 }
 
-.scoreDisplay {
+.score-display {
+  position: absolute;
+  top: 0.5rem;
+  left: 0.5rem;
+  color: #000000;
+  background: rgba(255, 255, 255, 0.3);
+  padding: 0.5rem 1rem;
+  border: 1px solid #ffffff;
+}
+
+.score-display .player {
+  display: inline-block;
+  position: relative;
+  font-size: 1.4rem;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+}
+
+.player-score {
+  position: relative;
+  width: 100%;
+}
+
+.score-display .score {
+  display: inline-block;
+  position: absolute;
+  right: 0;
+}
+.score-square {
+  position: absolute;
+  top: 0.4rem;
+  left: 0;
+  width: 1.2rem;
+  height: 1.2rem;
+  display: inline-block;
+}
+
+.controls-display,
+.player-view {
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  font-size: 5rem;
 }
 
-.controls-display {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-}
-
-.controls-display-box {
+.controls-display-box,
+.load-player-form {
+  background: rgba(255, 255, 255, 0.3);
   text-align: center;
   width: 100%;
   padding: 2rem;
   border: 2px solid #ffffff;
+  border-radius: 1rem;
 }
 
-.controls-display-box button {
+.form-field {
+  width: 100%;
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.form-field label {
+  display: inline-block;
+  width: 100%;
+  font-size: 2.2rem;
+}
+
+.form-field input {
+  display: inline-block;
+  text-align: center;
+  font-size: 3rem;
+  border: 0;
+  border-radius: 0.5rem;
+}
+
+.form-field input:focus {
+  outline: none;
+}
+
+.controls-display-box button,
+.load-player-form button {
+  font-size: 1.7rem;
   background: none;
-  border: 2px solid #000000;
+  background-color: green;
+  color: #ffffff;
   cursor: pointer;
+  margin-bottom: 2rem;
+  padding: 0.8rem 1.5rem;
+  border-radius: 0.5rem;
+}
+
+.controls-display-box .player-name {
+  font-size: 3rem;
 }
 
 .grid {
   display: flex;
   flex-wrap: wrap;
   margin: 0 auto;
+  background-color: skyblue;
 }
+.snake-container div,
 .grid div {
   width: 2rem;
   height: 2rem;
   outline: 1px solid #73c5e6;
 }
-.snake {
-  background: red;
+
+.snake-container div {
+  display: inline-block;
 }
+
+.snake-container {
+  font-size: 0;
+  margin-bottom: 2rem;
+}
+
+.snake {
+  position: relative;
+}
+
+.s-red,
+.s-red .snake-container .snake {
+  background: #c01c1c;
+}
+.s-green,
+.s-green .snake-container .snake {
+  background: #17ad17;
+}
+.s-yellow,
+.s-yellow .snake-container .snake {
+  background: #ffe600;
+}
+.s-pink,
+.s-pink .snake-container .snake {
+  background: #ff008c;
+}
+.s-blue,
+.s-blue .snake-container .snake {
+  background: #1600da;
+}
+.s-black,
+.s-black .snake-container .snake {
+  background: #000000;
+}
+.s-orange,
+.s-orange .snake-container .snake {
+  background: #ff7300;
+}
+.s-dark-blue,
+.s-dark-blue .snake-container .snake {
+  background: #130066;
+}
+.s-purple,
+.s-purple {
+  background: #8d107ce5;
+}
+.s-burgundy,
+.s-burgundy .snake-container .snake {
+  background: #610d0d;
+}
+
 .apple {
-  background: green;
+  background: rgb(255, 0, 0);
+  background: linear-gradient(
+    90deg,
+    rgba(255, 0, 0, 1) 0%,
+    rgba(18, 255, 0, 1) 100%
+  );
+  border-radius: 100%;
+  outline: 1px solid #000000;
+}
+
+.apple:after {
+  content: "";
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  border: 2px solid #666666;
+  border-radius: 100%;
 }
 
 .visually-hidden {
