@@ -147,9 +147,6 @@
       }
       player.score++;
       updatePlayerScore(player);
-      // clearInterval(gameLoop);
-      // gameLoopTime = gameLoopTime * speed;
-      // gameLoop = setInterval(moveChecks, gameLoopTime);
     }
   };
 
