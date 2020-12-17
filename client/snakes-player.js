@@ -88,12 +88,7 @@
       (player.snake[0] % gameProps.squaresX === 0 && player.direction === -1) ||
       (player.snake[0] - gameProps.squaresX <= 0 &&
         player.direction === -gameProps.squaresX) ||
-      (squares[player.snake[0] + player.direction].classList.contains(
-        "snake"
-      ) &&
-        squares[player.snake[0] + player.direction].classList.contains(
-          player.id
-        ))
+      squares[player.snake[0] + player.direction].classList.contains("snake")
     );
   };
 
@@ -184,6 +179,7 @@
     scoreDisplay.classList.remove("visually-hidden");
     renderSnakes();
     addApple(gameProps.firstAppleIndex);
+    clearInterval(gameLoop);
     gameLoop = setInterval(moveChecks, gameLoopTime);
   };
 
