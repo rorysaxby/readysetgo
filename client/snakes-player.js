@@ -56,18 +56,21 @@
     switch (e.key) {
       case "ArrowRight":
         direction = 1;
+        socket.emit("playerDirection", { playerId, direction });
         break;
       case "ArrowLeft":
         direction = -1;
+        socket.emit("playerDirection", { playerId, direction });
         break;
       case "ArrowUp":
         direction = -gameProps.squaresX;
+        socket.emit("playerDirection", { playerId, direction });
         break;
       case "ArrowDown":
         direction = +gameProps.squaresX;
+        socket.emit("playerDirection", { playerId, direction });
         break;
     }
-    socket.emit("playerDirection", { playerId, direction });
   };
 
   const renderSnakes = () => {
